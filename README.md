@@ -9,7 +9,7 @@ I also think it's interesting to see the differences in light levels
 produced by my various lighting setups - bright fluorescents, dim incandescent, 
 and even computer screens in the dark room.
 
-See an image of it in action here: [Arduino Office Sensors](http://www.jdsandifer.com/software-developer/image/Arduino_office_sensors.JPG).
+See an image of it in action here: [Arduino Office Sensors](https://twitter.com/jdsandifer/status/960298575291826176).
 
 Sample LCD output:
 ```
