@@ -1,4 +1,4 @@
-# Arduino Real Time Sensors
+# Arduino Real-Time Sensors
 I created temperature and light level sensors controlled by an Arduino to provide real time output to a LCD display and the serial bus (for connection to a computer and potentially the internet).
 
 I chose to set up the device to monitor my office for the fun of it!
