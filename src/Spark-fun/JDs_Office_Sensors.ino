@@ -43,47 +43,39 @@ const int photoSensorPin = A0;
 const int temperaturePin = A1;
 
 int lightLevel = -1;
-int calibratedLightLevel = -2; // used to store the calibrated lightLevel (footcandles)
-int maxThreshold = 0;     // used for setting the "max" light level
-int minThreshold = 1023;   // used for setting the "min" light level
+int calibratedLightLevel = -2; // in footcandles
+int maxThreshold = 0;     // for light level
+int minThreshold = 1023;   // for light level
 
 void setup()
 {
   Serial.begin(9600);
 
-  // Initialize the 16x2 LCD, clear it, and say hi
   lcd.begin(16, 2); //Initialize the 16x2 LCD
-  lcd.clear();  //Clear any old data displayed on the LCD
-  lcd.print("- JD's Office -"); // Display a message on the LCD!
+  lcd.clear();
+  lcd.print("- JD's Office -");
 }
 
 void loop()
 {
-  // Read and calibrate light level
-  lightLevel = analogRead(photoSensorPin);  // reads the voltage on the sensorPin
+  lightLevel = analogRead(photoSensorPin);
   calibrateLightLevel(25);    // calibrates the light level with a calculated calibration ratio
   
-  // Log light levels (uncalibrated and calibrated) to serial port ("xxx,  xx fc")
   Serial.print("Light - Voltage: ");
   Serial.print(lightLevel);
   Serial.print(", Footcandles: ");
   Serial.print(calibratedLightLevel);
   Serial.print(";     ");
 
-  // Setup for temperature gathering
   float voltage;
   float degreesC;
   float degreesF;
 
-  // Get temperature from sensor
-  voltage = getVoltage(temperaturePin); //Measure the voltage at the analog pin
+  voltage = getVoltage(temperaturePin);
 
-  // Convert raw data to Fahrenheit and Celsius
   degreesC = (voltage - 0.5) * 100.0;
   degreesF = degreesC * (9.0 / 5.0) + 32.0;
   
-  // Now print to the Serial monitor lines of data like this:
-  // "voltage: 0.73 deg C: 22.75 deg F: 72.96"
   Serial.print("Temperature - Voltage: ");
   Serial.print(voltage);
   Serial.print(", °C: ");
@@ -96,13 +88,12 @@ void loop()
   char degreesFChars[10];
   dtostrf(degreesF, 3, 1, degreesFChars);
 
-  // Display sensor info on the LCD
   lcd.setCursor(0, 1);   // Start from to column 0, row 1 (second row)
   lcd.print(" ");
   lcd.print(degreesFChars);
   lcd.print((char)223);   // 223 represents '°' on this LCD (HD44780?)
   lcd.print("F  ");
-  if (calibratedLightLevel < 10 && calibratedLightLevel >= 0) lcd.print("0");   // add a zero for single digits
+  if (calibratedLightLevel < 10 && calibratedLightLevel >= 0) lcd.print("0");
   lcd.print(calibratedLightLevel);
   lcd.print(" fc"); 
   
@@ -116,8 +107,6 @@ void calibrateLightLevel(int calibrationConstant)
 
 float getVoltage(int pin)
 {
-  // This equation converts the 0 to 1023 value that analogRead()
-  // returns, into a 0.0 to 5.0 value that is the true voltage
-  // being read at that pin.
+  // Convert 10-bit value to real voltage (0.0v - 5.0v)
   return (analogRead(pin) * 0.004882814); 
 }
